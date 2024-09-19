@@ -28,8 +28,15 @@ const ADMIN_CORS =
 // CORS to avoid issues when consuming Medusa from a client
 const STORE_CORS = process.env.STORE_CORS || "http://localhost:8000";
 
-const DATABASE_URL =
-  process.env.DATABASE_URL || "postgresql://postgres.wwzhrzggzjjlolvckkde:UF0UwdolJSvuki4u@aws-0-ap-south-1.pooler.supabase.com:6543/postgres";
+const DB_USERNAME = process.env.DB_USERNAME
+const DB_PASSWORD = process.env.DB_PASSWORD
+const DB_HOST = process.env.DB_HOST
+const DB_PORT = process.env.DB_PORT
+const DB_DATABASE = process.env.DB_DATABASE
+
+const DATABASE_URL = 
+  `postgres://${DB_USERNAME}:${DB_PASSWORD}` + 
+  `@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`
 
 const REDIS_URL = process.env.REDIS_URL || "redis://default:YaznO2ChvI9YduwDswnwYkEpoi8ifoUg@redis-12556.c264.ap-south-1-1.ec2.redns.redis-cloud.com:12556";
 
