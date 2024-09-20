@@ -38,7 +38,7 @@ const DATABASE_URL =
   `postgres://${DB_USERNAME}:${DB_PASSWORD}` + 
   `@${DB_HOST}:${DB_PORT}/${DB_DATABASE}`
 
-const REDIS_URL = process.env.REDIS_URL || "redis://default:YaznO2ChvI9YduwDswnwYkEpoi8ifoUg@redis-12556.c264.ap-south-1-1.ec2.redns.redis-cloud.com:12556";
+const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
 
 const plugins = [
   `medusa-fulfillment-manual`,
