@@ -79,70 +79,70 @@ const plugins = [
 //   },
 // },
 
-// {
-//   resolve: "medusa-plugin-auth",
-//   /** @type {import('medusa-plugin-auth').AuthOptions} */
-//   options: [
-//     {
-//       type: "oauth2",
-//       strict: "all",
-//       identifier: "oauth2",
-//       authorizationURL: OAuth2AuthorizationURL,
-//       tokenURL: OAuth2TokenURL,
-//       clientID: OAuth2ClientId,
-//       clientSecret: OAuth2ClientSecret,
-//       scope: OAuth2Scope.split(","),
-//       // admin: {
-//       //   callbackUrl: `${BACKEND_URL}/admin/auth/oauth2/cb`,
-//       //   failureRedirect: `${ADMIN_URL}/login`,
-//       //   successRedirect: `${ADMIN_URL}/`,
-//       // },
-//       store: {
-//         callbackUrl: `${BACKEND_URL}/store/auth/oauth2/cb`,
-//         failureRedirect: `${STORE_URL}/login`,
-//         successRedirect: `${STORE_URL}/`,
-//       },
-//       parseProfile: (json) => {
-//         const profile = {
-//           provider: "google",
-//           id: json.sub || json.id,
-//           email: json.email,
-//           name: {
-//             familyName: json.family_name || json.familyName,
-//             givenName: json.given_name || json.givenName,
-//           },
-//           emails: json.email
-//             ? [
-//                 {
-//                   value: json.email,
-//                 },
-//               ]
-//             : [],
-//           phoneNumbers: json.phone_number
-//             ? [
-//                 {
-//                   value: json.phone_number || "",
-//                 },
-//               ]
-//             : [],
-//           _json: json,
-//         };
+{
+  resolve: "medusa-plugin-auth",
+  /** @type {import('medusa-plugin-auth').AuthOptions} */
+  options: [
+    {
+      type: "oauth2",
+      strict: "all",
+      identifier: "oauth2",
+      authorizationURL: OAuth2AuthorizationURL,
+      tokenURL: OAuth2TokenURL,
+      clientID: OAuth2ClientId,
+      clientSecret: OAuth2ClientSecret,
+      scope: OAuth2Scope.split(","),
+      // admin: {
+      //   callbackUrl: `${BACKEND_URL}/admin/auth/oauth2/cb`,
+      //   failureRedirect: `${ADMIN_URL}/login`,
+      //   successRedirect: `${ADMIN_URL}/`,
+      // },
+      store: {
+        callbackUrl: `${BACKEND_URL}/store/auth/oauth2/cb`,
+        failureRedirect: `${STORE_URL}/login`,
+        successRedirect: `${STORE_URL}/`,
+      },
+      parseProfile: (json) => {
+        const profile = {
+          provider: "google",
+          id: json.sub || json.id,
+          email: json.email,
+          name: {
+            familyName: json.family_name || json.familyName,
+            givenName: json.given_name || json.givenName,
+          },
+          emails: json.email
+            ? [
+                {
+                  value: json.email,
+                },
+              ]
+            : [],
+          phoneNumbers: json.phone_number
+            ? [
+                {
+                  value: json.phone_number || "",
+                },
+              ]
+            : [],
+          _json: json,
+        };
 
-//         return profile;
-//       },
-//       validateProfile: (profile) => {
+        return profile;
+      },
+      validateProfile: (profile) => {
     
-//         if (!profile.id || !profile.email) {
-//           throw new Error("Invalid profile: ID and email are required.");
-//         }
+        if (!profile.id || !profile.email) {
+          throw new Error("Invalid profile: ID and email are required.");
+        }
 
     
-//         return profile;
-//       },
-//     },
+        return profile;
+      },
+    },
  
-//   ]
-// }
+  ]
+}
 
 
 
