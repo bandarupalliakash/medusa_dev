@@ -22,16 +22,22 @@ try {
 } catch (e) {}
 
 // CORS when consuming Medusa from admin
-const ADMIN_CORS =
-  process.env.ADMIN_CORS || "http://localhost:7000,http://localhost:7001";
+const ADMIN_CORS = process.env.ADMIN_CORS || "http://localhost:7000,http://localhost:7001";
 
 // CORS to avoid issues when consuming Medusa from a client
 const STORE_CORS = process.env.STORE_CORS || "http://localhost:8000";
 
 const DATABASE_URL =
   process.env.DATABASE_URL || "postgres://localhost/medusa-starter-default";
-
-const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
+  const BACKEND_URL = process.env.BACKEND_URL || "";
+  const REDIS_URL = process.env.REDIS_URL || "";
+  const OAuth2AuthorizationURL = process.env.OAUTH2_AUTH_URL || "";
+  const OAuth2TokenURL = process.env.OAUTH2_TOKEN_URL || "";
+  const OAuth2ClientId = process.env.OAUTH2_CLIENT_ID || "";
+  const OAuth2ClientSecret = process.env.OAUTH2_CLIENT_SECRET || "";
+  const OAuth2Scope = process.env.OAUTH2_SCOPE || "";
+  const STORE_URL = process.env.STORE_URL || "";
+  
 
 const plugins = [
   `medusa-fulfillment-manual`,
@@ -64,7 +70,79 @@ const plugins = [
   },
 },
 
+{
+  resolve: `medusa-plugin-slack-notification`,
+  options: {
+    show_discount_code: false,
+    slack_url: process.env.WEBHOOK_URL,
+    admin_orders_url: `http://admin/a/orders`,
+  },
+},
 
+{
+  resolve: "medusa-plugin-auth",
+  /** @type {import('medusa-plugin-auth').AuthOptions} */
+  options: [
+    {
+      type: "oauth2",
+      strict: "all",
+      identifier: "oauth2",
+      authorizationURL: OAuth2AuthorizationURL,
+      tokenURL: OAuth2TokenURL,
+      clientID: OAuth2ClientId,
+      clientSecret: OAuth2ClientSecret,
+      scope: OAuth2Scope.split(","),
+      // admin: {
+      //   callbackUrl: `${BACKEND_URL}/admin/auth/oauth2/cb`,
+      //   failureRedirect: `${ADMIN_URL}/login`,
+      //   successRedirect: `${ADMIN_URL}/`,
+      // },
+      store: {
+        callbackUrl: `${BACKEND_URL}/store/auth/oauth2/cb`,
+        failureRedirect: `${STORE_URL}/login`,
+        successRedirect: `${STORE_URL}/`,
+      },
+      parseProfile: (json) => {
+        const profile = {
+          provider: "google",
+          id: json.sub || json.id,
+          email: json.email,
+          name: {
+            familyName: json.family_name || json.familyName,
+            givenName: json.given_name || json.givenName,
+          },
+          emails: json.email
+            ? [
+                {
+                  value: json.email,
+                },
+              ]
+            : [],
+          phoneNumbers: json.phone_number
+            ? [
+                {
+                  value: json.phone_number || "",
+                },
+              ]
+            : [],
+          _json: json,
+        };
+
+        return profile;
+      },
+      validateProfile: (profile) => {
+    
+        if (!profile.id || !profile.email) {
+          throw new Error("Invalid profile: ID and email are required.");
+        }
+
+    
+        return profile;
+      },
+    },
+ 
+  ]
+}
 
 
 
@@ -77,7 +155,7 @@ const plugins = [
 ];
 
 const modules = {
-  /*eventBus: {
+ eventBus: {
     resolve: "@medusajs/event-bus-redis",
     options: {
       redisUrl: REDIS_URL
@@ -88,7 +166,7 @@ const modules = {
     options: {
       redisUrl: REDIS_URL
     }
-  },*/
+  },
 };
 
 /** @type {import('@medusajs/medusa').ConfigModule["projectConfig"]} */
@@ -99,7 +177,7 @@ const projectConfig = {
   database_url: DATABASE_URL,
   admin_cors: ADMIN_CORS,
   // Uncomment the following lines to enable REDIS
-  // redis_url: REDIS_URL
+  redis_url: REDIS_URL
 };
 
 /** @type {import('@medusajs/medusa').ConfigModule} */
