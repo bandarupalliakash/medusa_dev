@@ -70,14 +70,14 @@ const plugins = [
   },
 },
 
-{
-  resolve: `medusa-plugin-slack-notification`,
-  options: {
-    show_discount_code: false,
-    slack_url: process.env.WEBHOOK_URL,
-    admin_orders_url: `http://admin/a/orders`,
-  },
-},
+// {
+//   resolve: `medusa-plugin-slack-notification`,
+//   options: {
+//     show_discount_code: false,
+//     slack_url: process.env.WEBHOOK_URL,
+//     admin_orders_url: `http://admin/a/orders`,
+//   },
+// },
 
 {
   resolve: "medusa-plugin-auth",
