@@ -73,16 +73,30 @@ const plugins = [
   },
 },
 
-// {
-//   resolve: `medusa-plugin-slack-notification`,
-//   options: {
-//     show_discount_code: false,
-//     slack_url: process.env.WEBHOOK_URL,
-//     admin_orders_url: `http://admin/a/orders`,
-//   },
-// },
+{
+  resolve: `medusa-plugin-slack-notification`,
+  options: {
+    show_discount_code: false,
+    slack_url: process.env.WEBHOOK_URL,
+    admin_orders_url: `http://admin/a/orders`,
+  },
+},
 
-
+{
+  resolve: `medusa-plugin-sendgrid-typescript`,
+  /** @type {import('medusa-plugin-sendgrid-typescript').PluginOptions} */
+  options: {
+    api_key: process.env.SENDGRID_API_KEY, 
+    from: process.env.SENDGRID_FROM, 
+    templates: {
+      order_placed_template: {
+        id: process.env.SENDGRID_ORDER_PLACED_ID, 
+        subject: "Thank you for your order #{display_id}!",
+      },
+    },
+  },
+}
+,
 
 {
   resolve: "medusa-plugin-auth",
@@ -159,7 +173,7 @@ const plugins = [
       store: {
         callbackUrl: `${BACKEND_URL}/store/auth/google/cb`,
         failureRedirect: `${STORE_URL}/login`,
-        successRedirect: `${STORE_URL}/`,
+        successRedirect: `${STORE_URL}/account`,
       }
     }
   ]
