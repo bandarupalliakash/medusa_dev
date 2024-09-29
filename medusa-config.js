@@ -37,6 +37,9 @@ const DATABASE_URL =
   const OAuth2ClientSecret = process.env.OAUTH2_CLIENT_SECRET || "";
   const OAuth2Scope = process.env.OAUTH2_SCOPE || "";
   const STORE_URL = process.env.STORE_URL || "";
+  const GoogleClientId = process.env.GOOGLE_CLIENT_ID || "";
+  const GoogleClientSecret = process.env.GOOGLE_CLIENT_SECRET || "";
+
   
 
 const plugins = [
@@ -78,6 +81,8 @@ const plugins = [
 //     admin_orders_url: `http://admin/a/orders`,
 //   },
 // },
+
+
 
 {
   resolve: "medusa-plugin-auth",
@@ -140,9 +145,26 @@ const plugins = [
         return profile;
       },
     },
- 
+    {
+      type: "google",
+      strict: "none", 
+      identifier: "google",
+      clientID: GoogleClientId,
+      clientSecret: GoogleClientSecret,
+      // admin: {
+      //   callbackUrl: `${BACKEND_URL}/admin/auth/google/cb`,
+      //   failureRedirect: `${ADMIN_URL}/login`,
+      //   successRedirect: `${ADMIN_URL}/`,
+      // },
+      store: {
+        callbackUrl: `${BACKEND_URL}/store/auth/google/cb`,
+        failureRedirect: `${STORE_URL}/login`,
+        successRedirect: `${STORE_URL}/`,
+      }
+    }
   ]
-}
+},
+
 
 
 
